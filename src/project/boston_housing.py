@@ -3,7 +3,7 @@
 # Load libraries
 import numpy as np
 import pylab as pl
-from sklearn import datasets
+from sklearn import datasets, cross_validation
 from sklearn.tree import DecisionTreeRegressor
 
 
@@ -32,12 +32,19 @@ def explore_city_data(city_data):
 
     # Please calculate the following values using the Numpy library
     # Size of data (number of houses)?
+    print("Size of data (number of houses) are %s" % len(housing_features))
     # Number of features?
+    print("Number of features are %s" % len(housing_features[0]))
     # Minimum price?
+    print("Minimum price is %s" % np.min(housing_prices))
     # Maximum price?
+    print("Maximum price is %s" % np.max(housing_prices))
     # Calculate mean price?
+    print("Mean price is %s" % np.mean(housing_prices))
     # Calculate median price?
+    print("Median price is %s" % np.median(housing_prices))
     # Calculate standard deviation?
+    print("Standard deviation is %s" % np.std(housing_prices))
 
 
 def split_data(city_data):
@@ -49,6 +56,7 @@ def split_data(city_data):
     ###################################
     ### Step 2. YOUR CODE GOES HERE ###
     ###################################
+    X_train, y_train, X_test, y_test = cross_validation.train_test_split(X, y, test_size=0.3, random_state=0)
 
     return X_train, y_train, X_test, y_test
 
