@@ -3,9 +3,10 @@
 # Load libraries
 import numpy as np
 import pylab as pl
-from sklearn import datasets, cross_validation
+from sklearn import datasets
+from sklearn.cross_validation import train_test_split
+from sklearn.metrics import mean_squared_error
 from sklearn.tree import DecisionTreeRegressor
-
 
 ################################
 ### ADD EXTRA LIBRARIES HERE ###
@@ -46,7 +47,6 @@ def explore_city_data(city_data):
     # Calculate standard deviation?
     print("Standard deviation is %s" % np.std(housing_prices))
 
-
 def split_data(city_data):
     """Randomly shuffle the sample set. Divide it into 70 percent training and 30 percent testing data."""
 
@@ -56,9 +56,10 @@ def split_data(city_data):
     ###################################
     ### Step 2. YOUR CODE GOES HERE ###
     ###################################
-    X_train, y_train, X_test, y_test = cross_validation.train_test_split(X, y, test_size=0.3, random_state=0)
 
-    return X_train, y_train, X_test, y_test
+    X_train, y_train, X_test, y_test = train_test_split(X, y, test_size=0.30, random_state=0)
+
+    return X_train, X_test, y_train, y_test
 
 
 def performance_metric(label, prediction):
@@ -70,7 +71,7 @@ def performance_metric(label, prediction):
 
     # The following page has a table of scoring functions in sklearn:
     # http://scikit-learn.org/stable/modules/classes.html#sklearn-metrics-metrics
-    pass
+    return mean_squared_error(label, prediction)
 
 
 def learning_curve(depth, X_train, y_train, X_test, y_test):
@@ -85,6 +86,7 @@ def learning_curve(depth, X_train, y_train, X_test, y_test):
     print depth
 
     for i, s in enumerate(sizes):
+
         # Create and fit the decision tree regressor model
         regressor = DecisionTreeRegressor(max_depth=depth)
         regressor.fit(X_train[:s], y_train[:s])
@@ -92,6 +94,7 @@ def learning_curve(depth, X_train, y_train, X_test, y_test):
         # Find the performance on the training and testing set
         train_err[i] = performance_metric(y_train[:s], regressor.predict(X_train[:s]))
         test_err[i] = performance_metric(y_test, regressor.predict(X_test))
+
 
     # Plot learning curve graph
     learning_curve_graph(sizes, train_err, test_err)
@@ -184,8 +187,6 @@ def fit_predict_model(city_data):
     print "House: " + str(x)
     print "Prediction: " + str(y)
 
-
-# In the case of the documentation page for GridSearchCV, it might be the case that the example is just a demonstration of syntax for use of the function, rather than a statement about
 def main():
     """Analyze the Boston housing data. Evaluate and validate the
     performanance of a Decision Tree regressor on the housing data.
